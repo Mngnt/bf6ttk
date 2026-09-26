@@ -5,16 +5,17 @@ import rawDataJson from '../data/bf6.json';
 
 export function parseDataset(rawData: Record<string, any>, params: SimulationParams): {
   weapons: ProcessedWeapon[];
+  datasetInfo: DatasetInfo;
   info: DatasetInfo;
 } {
   const info: DatasetInfo = {
-    version: rawData.info?.version || '1.0.0',
-    versionDate: rawData.info?.versionDate || 'Unknown'
+    version: rawData?.info?.version || '1.4.2.0',
+    versionDate: rawData?.info?.versionDate || '18 AUG 2026'
   };
 
   const weapons: ProcessedWeapon[] = [];
 
-  for (const [key, value] of Object.entries(rawData)) {
+  for (const [key, value] of Object.entries(rawData || {})) {
     if (key === 'info') continue;
     if (!value || typeof value !== 'object' || !value.displayname) continue;
 
@@ -32,11 +33,12 @@ export function parseDataset(rawData: Record<string, any>, params: SimulationPar
     });
   }
 
-  return { weapons, info };
+  return { weapons, datasetInfo: info, info };
 }
 
 export function getDefaultDataset(params: SimulationParams): {
   weapons: ProcessedWeapon[];
+  datasetInfo: DatasetInfo;
   info: DatasetInfo;
 } {
   return parseDataset(rawDataJson as Record<string, any>, params);

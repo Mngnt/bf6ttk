@@ -117,7 +117,7 @@ export const WeaponProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <WeaponContext.Provider
       value={{
         weapons,
-        datasetInfo,
+        datasetInfo: datasetInfo || { version: '1.4.2.0', versionDate: '18 AUG 2026' },
         simulationParams,
         setSimulationParams,
         selectedClass,

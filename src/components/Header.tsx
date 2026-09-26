@@ -73,10 +73,10 @@ export const Header: React.FC = () => {
                   BF6 Ballistics Lab
                 </h1>
                 <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 font-semibold tracking-wide">
-                  v{datasetInfo.version}
+                  v{datasetInfo?.version || '1.4.2.0'}
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono hidden sm:inline">
-                  {datasetInfo.versionDate}
+                  {datasetInfo?.versionDate || '18 AUG 2026'}
                 </span>
               </div>
               <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
