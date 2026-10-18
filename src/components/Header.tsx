@@ -21,6 +21,7 @@ export const Header: React.FC = () => {
     selectedWeaponIds,
     isLoading,
     error,
+    clearError,
     fetchLiveDataset,
     resetToBundledDataset,
   } = useWeapons();
@@ -117,9 +118,19 @@ export const Header: React.FC = () => {
               </div>
             )}
             {error && (
-              <div className="flex items-center gap-1 text-xs text-rose-400 bg-rose-950/40 border border-rose-800/50 px-2.5 py-1.5 rounded-lg" title={error}>
-                <AlertCircle className="w-3.5 h-3.5" />
-                <span className="truncate max-w-[140px]">Live fetch failed</span>
+              <div
+                className="flex items-center gap-1.5 text-xs text-amber-300 bg-amber-950/60 border border-amber-700/60 px-2.5 py-1 rounded-lg max-w-[260px] shadow-sm animate-fadeIn"
+                title={error}
+              >
+                <AlertCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                <span className="truncate text-[11px] font-medium">Bundled Data Active (CORS)</span>
+                <button
+                  onClick={clearError}
+                  className="text-slate-400 hover:text-white ml-1 text-sm leading-none font-bold"
+                  title="Dismiss alert"
+                >
+                  &times;
+                </button>
               </div>
             )}
 
@@ -187,11 +198,20 @@ export const Header: React.FC = () => {
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-400"
               />
             </div>
+            <div className="bg-slate-950/70 border border-slate-800 rounded-lg p-2.5 text-[11px] text-slate-400 space-y-1">
+              <span className="text-slate-300 font-semibold block">Browser Security Notice (CORS):</span>
+              <p>
+                Browsers block direct cross-domain requests if the remote host doesn&apos;t provide CORS headers. In local development (<code>localhost:3000</code>), this app routes via an internal proxy. In production, the bundled database (<code>v{datasetInfo?.version}</code>) is always active, or you can upload any custom JSON file with the <strong>Load JSON</strong> button.
+              </p>
+            </div>
             <div className="flex items-center justify-between pt-2">
               <button
                 type="button"
-                onClick={resetToBundledDataset}
-                className="text-xs text-slate-400 hover:text-slate-200 underline"
+                onClick={() => {
+                  resetToBundledDataset();
+                  clearError();
+                }}
+                className="text-xs text-slate-400 hover:text-cyan-400 underline"
               >
                 Reset to bundled data
               </button>

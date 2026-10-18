@@ -24,6 +24,7 @@ interface WeaponContextType {
   setInspectingWeapon: (weapon: ProcessedWeapon | null) => void;
   isLoading: boolean;
   error: string | null;
+  clearError: () => void;
   fetchLiveDataset: (url?: string) => Promise<void>;
   resetToBundledDataset: () => void;
 }
@@ -90,19 +91,58 @@ export const WeaponProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setSelectedWeaponIds([]);
   };
 
+  const clearError = () => {
+    setError(null);
+  };
+
   const fetchLiveDataset = async (url: string = 'https://sym.gg/legacy/pages/bf6/data/bf6.json') => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+      let targetUrl = url;
+
+      // In local dev on localhost, route through Vite proxy to bypass browser CORS block
+      const isLocalhost =
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+      if (isLocalhost && url.includes('sym.gg/legacy/pages/bf6/data/bf6.json')) {
+        targetUrl = '/sym-api/legacy/pages/bf6/data/bf6.json';
       }
+
+      let response: Response;
+      try {
+        response = await fetch(targetUrl);
+      } catch (firstErr) {
+        // If the proxy or direct fetch failed, attempt direct fallback or vice-versa
+        if (targetUrl !== url) {
+          response = await fetch(url);
+        } else {
+          throw firstErr;
+        }
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText || 'Unable to retrieve endpoint'}`);
+      }
+
       const data = await response.json();
+      if (!data || typeof data !== 'object') {
+        throw new Error('Received unexpected or malformed dataset format.');
+      }
+
       setRawData(data);
+      setError(null);
     } catch (err: any) {
-      console.error('Failed to fetch live data:', err);
-      setError(err?.message || 'Failed to fetch live dataset. Reverting to cached data.');
+      console.warn('Failed to fetch live data:', err);
+      const isCors = err?.name === 'TypeError' || String(err?.message || '').toLowerCase().includes('failed to fetch');
+      if (isCors) {
+        setError(
+          'Direct browser connection blocked by Sym.gg server CORS policy. The bundled database is active. You can also upload a downloaded file via "Load JSON".'
+        );
+      } else {
+        setError(err?.message || 'Failed to fetch live dataset. Bundled data active.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +174,7 @@ export const WeaponProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setInspectingWeapon,
         isLoading,
         error,
+        clearError,
         fetchLiveDataset,
         resetToBundledDataset,
       }}

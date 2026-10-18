@@ -7,7 +7,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
+    open: true,
+    proxy: {
+      '/sym-api': {
+        target: 'https://sym.gg',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sym-api/, '')
+      }
+    }
   },
   build: {
     chunkSizeWarningLimit: 1000,
