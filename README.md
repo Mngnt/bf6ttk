@@ -100,3 +100,31 @@ BF6TTK/
 ├── tsconfig.json                 # TypeScript configuration
 └── vite.config.ts                # Vite build and manual chunking config
 ```
+
+---
+
+## 🌐 Deploying to GitHub Pages
+
+This repository includes a preconfigured GitHub Actions workflow (`.github/workflows/deploy.yml`) and relative asset base paths in `vite.config.ts` (`base: './'`).
+
+### Automated Deployment via GitHub Actions:
+1. Push this repository to GitHub:
+   ```bash
+   git remote add origin https://github.com/<your-username>/<your-repo-name>.git
+   git branch -M main
+   git push -u origin main
+   ```
+2. In your GitHub repository, navigate to **Settings** > **Pages**.
+3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
+4. The workflow will automatically build and publish your site at `https://<your-username>.github.io/<your-repo-name>/`.
+
+---
+
+## ⚖️ Legal Disclaimer & Data Attribution
+
+- **Data Attribution:**
+  All weapon specifications, damage tables, fire rates, ballistic properties, and datamined values utilized in this project are compiled and sourced from [Sym.gg](https://sym.gg) under their community data sharing policy. We express our sincere gratitude to the Sym.gg team and contributors. For the most up-to-date live balance changes and in-depth data, visit [https://sym.gg](https://sym.gg).
+
+- **Trademark & Non-Commercial Fan Project Disclaimer:**
+  This project is an independent, open-source, non-commercial fan creation intended solely for community research, weapon analysis, and educational purposes. Battlefield and associated game titles, logos, emblems, and visual assets are trademarks or registered trademarks of **Electronic Arts Inc.** and **DICE**. This tool is not affiliated with, endorsed by, or sponsored by Electronic Arts Inc. or DICE in any way.
+

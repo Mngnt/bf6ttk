@@ -80,7 +80,15 @@ export const Header: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                <span>Sym.gg Weapon Database</span>
+                <a
+                  href="https://sym.gg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-cyan-400 underline decoration-slate-600 hover:decoration-cyan-400 transition-colors"
+                  title="Visit Sym.gg official weapon statistics community"
+                >
+                  Sym.gg Weapon Database
+                </a>
                 <span className="inline-block w-1 h-1 rounded-full bg-slate-600"></span>
                 <span>TTK & Range Analyzer</span>
               </p>
